@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Products - Direct Market Access</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        
+        .product-info {
+            margin-top: 15px;
+        }
+        
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .product-farmer {
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .product-availability {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .order-btn {
+            background-color: #2e7d32;
+            color: white;
+            flex: 1;
+        }
+        
+        .preorder-btn {
+            background-color: #1565c0;
+            color: white;
+            flex: 1;
+        }
+        
+        .order-btn:hover {
+            background-color: #1b5e20;
+        }
+        
+        .preorder-btn:hover {
+            background-color: #0d47a1;
+        }
+        
+        .filters {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .apply-filter {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .reset-filter {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 5px;
+        }
+        
+        .pagination button {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 8px 12px;
+        }
+        
+        .pagination button.active {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .order-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+        }
+        
+        .close-modal {
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .quantity-selector button {
+            width: 30px;
+            height: 30px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .quantity-selector input {
+            width: 50px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Direct Market Access</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="browse_products.html" class="active">Browse Products</a></li>
+                <li><a href="preorder_form.html">Preorder</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+                <li><a href="../index.html" class="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Browse Products</h2>
+        
+        <div class="filters">
+            <h3>Filter Products</h3>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="">All Categories</option>
+                        <option value="fruits">Fruits</option>
+                        <option value="vegetables">Vegetables</option>
+                        <option value="grains">Grains</option>
+                        <option value="dairy">Dairy</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="farmer">Farmer</label>
+                    <select id="farmer">
+                        <option value="">All Farmers</option>
+                        <!-- Will be populated from database -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="price-range">Price Range</label>
+                    <select id="price-range">
+                        <option value="">Any Price</option>
+                        <option value="0-50">rs0 - rs50</option>
+                        <option value="50-100">rs50 - rs100</option>
+                        <option value="100-200">rs100 - rs200</option>
+                        <option value="200+">rs200+</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" placeholder="Search products...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="apply-filter" id="apply-filters">Apply Filters</button>
+                    <button class="reset-filter" id="reset-filters">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-grid" id="product-container">
+            <!-- Products will be loaded here dynamically -->
+            
+            <!-- Example Product Card (will be generated dynamically) -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../assets/Fruits.jpg" alt="Fresh Apples" class="product-image">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">Fresh Organic Apples</div>
+                    <div class="product-farmer">From: Green Valley Farm</div>
+                    <div class="product-price">rs299 per kg</div>
+                    <div class="product-availability">Available: 150 kg</div>
+                    <div class="product-description">Sweet and juicy apples, freshly harvested from our organic orchards.</div>
+                    <div class="action-buttons">
+                        <button class="order-btn" data-id="1">Order Now</button>
+                        <button class="preorder-btn" data-id="1">Preorder</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../assets/Tomato.jpg" alt="Fresh Tomatoes" class="product-image">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">Farm Fresh Tomatoes</div>
+                    <div class="product-farmer">From: Sunshine Farm</div>
+                    <div class="product-price">175rs per kg</div>
+                    <div class="product-availability">Available: 120 kg</div>
+                    <div class="product-description">Ripe, red tomatoes perfect for salads or cooking.</div>
+                    <div class="action-buttons">
+                        <button class="order-btn" data-id="2">Order Now</button>
+                        <button class="preorder-btn" data-id="2">Preorder</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../assets/carrot.jpg" alt="Fresh Carrots" class="product-image">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">Organic Carrots</div>
+                    <div class="product-farmer">From: Harvest Moon Farm</div>
+                    <div class="product-price">125rs per kg</div>
+                    <div class="product-availability">Available: 200 kg</div>
+                    <div class="product-description">Crunchy and sweet organic carrots, freshly harvested.</div>
+                    <div class="action-buttons">
+                        <button class="order-btn" data-id="3">Order Now</button>
+                        <button class="preorder-btn" data-id="3">Preorder</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../assets/Diary.jpg" alt="Fresh Milk" class="product-image">
+                </div>
+                <div class="product-info">
+                    <div class="product-name">Fresh Dairy Milk</div>
+                    <div class="product-farmer">From: Green Meadows Dairy</div>
+                    <div class="product-price">350rs per liter</div>
+                    <div class="product-availability">Available: 50 liters</div>
+                    <div class="product-description">Fresh cow's milk, pasteurized and ready to drink.</div>
+                    <div class="action-buttons">
+                        <button class="order-btn" data-id="4">Order Now</button>
+                        <button class="preorder-btn" data-id="4">Preorder</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pagination">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>Next</button>
+        </div>
+    </main>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="order-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Order Product</h3>
+            <form id="orderForm">
+                <input type="hidden" id="product-id" name="product_id">
+                <p id="modal-product-name">Product Name</p>
+                <p id="modal-product-price">0.00 per kg</p>
+                
+                <div class="form-group">
+                    <label for="quantity">Quantity (kg):</label>
+                    <div class="quantity-selector">
+                        <button type="button" id="decrease-qty">-</button>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1">
+                        <button type="button" id="increase-qty">+</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="delivery-address">Delivery Address:</label>
+                    <textarea id="delivery-address" name="delivery_address" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="delivery-date">Preferred Delivery Date:</label>
+                    <input type="date" id="delivery-date" name="delivery_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes:</label>
+                    <textarea id="notes" name="notes" rows="2"></textarea>
+                </div>
+                
+                <div class="order-summary">
+                    <p>Total: <span id="order-total">0.00</span></p>
+                </div>
+                
+                <button type="submit" class="order-btn">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preorder Modal -->
+    <div id="preorderModal" class="order-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Preorder Request</h3>
+            <form id="preorderForm">
+                <input type="hidden" id="preorder-product-id" name="product_id">
+                <p id="preorder-product-name">Product Name</p>
+                
+                <div class="form-group">
+                    <label for="preorder-quantity">Desired Quantity (kg):</label>
+                    <div class="quantity-selector">
+                        <button type="button" id="preorder-decrease-qty">-</button>
+                        <input type="number" id="preorder-quantity" name="quantity" value="5" min="5">
+                        <button type="button" id="preorder-increase-qty">+</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preorder-date">Needed By Date:</label>
+                    <input type="date" id="preorder-date" name="needed_by_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preorder-price">Price Offer (per kg):</label>
+                    <input type="number" id="preorder-price" name="price_offer" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preorder-notes">Message to Farmer:</label>
+                    <textarea id="preorder-notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="preorder-btn">Send Preorder Request</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Direct Market Access for Farmers</p>
+    </footer>
+
+    <script>
+        // Sample data - in production, this would come from the server
+        const products = [
+            // Data will be loaded from the database
+        ];
+        
+        // Modal handling
+        const orderModal = document.getElementById('orderModal');
+        const preorderModal = document.getElementById('preorderModal');
+        const orderBtns = document.querySelectorAll('.order-btn');
+        const preorderBtns = document.querySelectorAll('.preorder-btn');
+        const closeBtns = document.querySelectorAll('.close-modal');
+        
+        // Open order modal
+        orderBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                document.getElementById('product-id').value = productId;
+                
+                // In production, fetch product details using the ID
+                const productName = this.closest('.product-card').querySelector('.product-name').textContent;
+                const productPrice = this.closest('.product-card').querySelector('.product-price').textContent;
+                
+                document.getElementById('modal-product-name').textContent = productName;
+                document.getElementById('modal-product-price').textContent = productPrice;
+                
+                // Set minimum date to today
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const formattedDate = tomorrow.toISOString().substr(0, 10);
+                document.getElementById('delivery-date').min = formattedDate;
+                
+                // Calculate initial total
+                updateOrderTotal();
+                
+                orderModal.style.display = 'block';
+            });
+        });
+        
+        // Open preorder modal
+        preorderBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                document.getElementById('preorder-product-id').value = productId;
+                
+                // In production, fetch product details using the ID
+                const productName = this.closest('.product-card').querySelector('.product-name').textContent;
+                document.getElementById('preorder-product-name').textContent = productName;
+                
+                // Set price suggestion based on current price
+                const priceText = this.closest('.product-card').querySelector('.product-price').textContent;
+                const price = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+                document.getElementById('preorder-price').value = price.toFixed(2);
+                
+                // Set minimum date to a week from now
+                const today = new Date();
+                const nextWeek = new Date(today);
+                nextWeek.setDate(nextWeek.getDate() + 7);
+                const formattedDate = nextWeek.toISOString().substr(0, 10);
+                document.getElementById('preorder-date').min = formattedDate;
+                document.getElementById('preorder-date').value = formattedDate;
+                
+                preorderModal.style.display = 'block';
+            });
+        });
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                orderModal.style.display = 'none';
+                preorderModal.style.display = 'none';
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === orderModal) {
+                orderModal.style.display = 'none';
+            }
+            if (event.target === preorderModal) {
+                preorderModal.style.display = 'none';
+            }
+        });
+        
+        // Quantity selectors
+        document.getElementById('increase-qty').addEventListener('click', function() {
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateOrderTotal();
+        });
+        
+        document.getElementById('decrease-qty').addEventListener('click', function() {
+            const quantityInput = document.getElementById('quantity');
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updateOrderTotal();
+            }
+        });
+        
+        document.getElementById('preorder-increase-qty').addEventListener('click', function() {
+            const quantityInput = document.getElementById('preorder-quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 5;
+        });
+        
+        document.getElementById('preorder-decrease-qty').addEventListener('click', function() {
+            const quantityInput = document.getElementById('preorder-quantity');
+            if (parseInt(quantityInput.value) > 5) {
+                quantityInput.value = parseInt(quantityInput.value) - 5;
+            }
+        });
+        
+        document.getElementById('quantity').addEventListener('change', updateOrderTotal);
+        
+        function updateOrderTotal() {
+            const priceText = document.getElementById('modal-product-price').textContent;
+            const price = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const total = price * quantity;
+            document.getElementById('order-total').textContent = '$' + total.toFixed(2);
+        }
+        
+        // Form submissions
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In production, this would send data to the server
+            alert('Order placed successfully! The farmer will process your order soon.');
+            orderModal.style.display = 'none';
+        });
+        
+        document.getElementById('preorderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In production, this would send data to the server
+            alert('Preorder request sent successfully! The farmer will review your request.');
+            preorderModal.style.display = 'none';
+        });
+        
+        // Filter functionality
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            // In production, this would send filter parameters to the server
+            alert('Filters applied!');
+        });
+        
+        document.getElementById('reset-filters').addEventListener('click', function() {
+            document.getElementById('category').value = '';
+            document.getElementById('farmer').value = '';
+            document.getElementById('price-range').value = '';
+            document.getElementById('search').value = '';
+            // In production, this would reset the product list
+        });
+        
+        // In a real application, you would load products from the server here
+        function loadProducts() {
+            // Fetch products from backend/customer/browse_products.php
+            // and populate the product-container
+        }
+        
+        // Call on page load
+        // loadProducts();
+    </script>
+</body>
+</html>

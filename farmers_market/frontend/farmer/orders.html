@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Orders | Direct Market Access</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .order-items {
+            margin-bottom: 15px;
+        }
+        .order-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .status-pending {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .status-complete {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .status-cancelled {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Direct Market Access</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="add_product.html">Add Product</a></li>
+                    <li><a href="preorder_requests.html">Preorder Requests</a></li>
+                    <li><a href="orders.html" class="active">Orders</a></li>
+                    <li><a href="../index.html" id="logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Manage Orders</h2>
+        <div class="filter-controls">
+            <label for="status-filter">Filter by status:</label>
+            <select id="status-filter">
+                <option value="all">All Orders</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="complete">Complete</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <div id="orders-container">
+            <!-- Orders will be loaded here dynamically -->
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h3>Order #ORD12345</h3>
+                        <p>Placed on: May 6, 2025</p>
+                        <p>Customer: Mokshith</p>
+                    </div>
+                    <div>
+                        <p>Status: <span class="status-pending">Pending</span></p>
+                        <p>Total: 45.50rs</p>
+                    </div>
+                </div>
+                <div class="order-items">
+                    <h4>Order Items:</h4>
+                    <ul>
+                        <li>Organic Tomatoes - 2kg - 120ra</li>
+                        <li>Fresh Spinach - 1kg - 200rs</li>
+                        <li>Red Apples - 4kg - 500rs</li>
+                        <li>Organic Carrots - 3kg - 200rs</li>
+                        <li>Delivery - 11.00</li>
+                    </ul>
+                </div>
+                <div class="order-actions">
+                    <button class="btn btn-secondary">Update Status</button>
+                    <button class="btn btn-primary">View Details</button>
+                </div>
+            </div>
+
+            <div class="order-card">
+                <div class="order-header">
+                    <div>
+                        <h3>Order #ORD12346</h3>
+                        <p>Placed on: May 5, 2025</p>
+                        <p>Customer: chandana</p>
+                    </div>
+                    <div>
+                        <p>Status: <span class="status-complete">Complete</span></p>
+                        <p>Total: 3200rs</p>
+                    </div>
+                </div>
+                <div class="order-items">
+                    <h4>Order Items:</h4>
+                    <ul>
+                        <li>Bananas - 2kg - 200rs</li>
+                        <li>Fresh Cucumbers - 1.5kg - 45.50rs</li>
+                        <li>Strawberries - 1kg - 700rs</li>
+                        <li>Organic Potatoes - 5kg - 150rs</li>
+                    </ul>
+                </div>
+                <div class="order-actions">
+                    <button class="btn btn-primary">View Details</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Direct Market Access for Farmers. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the status filter element
+        const statusFilter = document.getElementById('status-filter');
+        
+        // Add event listener for filter changes
+        statusFilter.addEventListener('change', function() {
+            filterOrders(this.value);
+        });
+        
+        // Function to filter orders by status
+        function filterOrders(status) {
+            console.log('Filtering orders by status:', status);
+            // In a real application, this would make an AJAX request to the server
+            // For now, we'll just log the filter action
+            
+            // Example AJAX request (commented out):
+            /*
+            fetch('../backend/farmer/get_orders.php?status=' + status)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the orders display
+                    renderOrders(data);
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+            */
+        }
+        
+        // Function to logout
+        document.getElementById('logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Perform logout operations (e.g., clear session/cookies)
+            // Then redirect to login page
+            window.location.href = '../index.html';
+        });
+    });
+    </script>
+</body>
+</html>

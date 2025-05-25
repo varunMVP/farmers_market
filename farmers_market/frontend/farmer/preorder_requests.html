@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preorder Requests - Farm Direct</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        /* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f7f9fc;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Form Styles */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.radio-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.radio-group input {
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+.radio-group label {
+    display: inline;
+    font-weight: normal;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.form-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Alert/Message Styles */
+#message-container {
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Navigation */
+nav {
+    background-color: #2c3e50;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    color: #3498db;
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 2rem;
+}
+
+.sidebar {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin-bottom: 0.75rem;
+}
+
+.sidebar a {
+    color: #2c3e50;
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    background-color: #3498db;
+    color: white;
+}
+
+.content-area {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Card Styles for Products */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image {
+    height: 150px;
+    background-color: #f7f9fc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.product-details {
+    padding: 1rem;
+}
+
+.product-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    color: #3498db;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.product-quantity {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Farm Direct</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="add_product.html">Add Product</a></li>
+                    <li><a href="preorder_requests.html" class="active">Preorders</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="../index.html" class="logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="preorder-requests-section">
+        <div class="container">
+            <div class="section-header">
+                <h1>Preorder Requests</h1>
+                <p>Review and manage preorder requests from customers.</p>
+            </div>
+
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="status-filter">Filter by Status:</label>
+                    <select id="status-filter">
+                        <option value="all">All Requests</option>
+                        <option value="pending">Pending</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <input type="text" id="search-preorders" placeholder="Search by customer or product...">
+                    <button class="btn btn-search">Search</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table" id="preorder-requests-table">
+                    <thead>
+                        <tr>
+                            <th>Request ID</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Requested Date</th>
+                            <th>Delivery Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#PRE10001</td>
+                            <td>Mokshith</td>
+                            <td>Organic Strawberries</td>
+                            <td>5 kg</td>
+                            <td>2025-05-04</td>
+                            <td>2025-05-15</td>
+                            <td><span class="status-pending">Pending</span></td>
+                            <td>
+                                <button class="btn btn-small btn-primary btn-accept" data-id="PRE10001">Accept</button>
+                                <button class="btn btn-small btn-reject" data-id="PRE10001">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRE10002</td>
+                            <td>chandana</td>
+                            <td>Fresh Carrots</td>
+                            <td>3 kg</td>
+                            <td>2025-05-04</td>
+                            <td>2025-05-12</td>
+                            <td><span class="status-pending">Pending</span></td>
+                            <td>
+                                <button class="btn btn-small btn-primary btn-accept" data-id="PRE10002">Accept</button>
+                                <button class="btn btn-small btn-reject" data-id="PRE10002">Reject</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRE10003</td>
+                            <td>Komal</td>
+                            <td>Organic Apples</td>
+                            <td>10 kg</td>
+                            <td>2025-05-03</td>
+                            <td>2025-05-20</td>
+                            <td><span class="status-accepted">Accepted</span></td>
+                            <td>
+                                <button class="btn btn-small btn-view" data-id="PRE10003">View Details</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#PRE10004</td>
+                            <td>varun</td>
+                            <td>Fresh Spinach</td>
+                            <td>2 kg</td>
+                            <td>2025-05-02</td>
+                            <td>2025-05-10</td>
+                            <td><span class="status-rejected">Rejected</span></td>
+                            <td>
+                                <button class="btn btn-small btn-view" data-id="PRE10004">View Details</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="btn-page" disabled>&laquo;</button>
+                <button class="btn-page active">1</button>
+                <button class="btn-page">2</button>
+                <button class="btn-page">3</button>
+                <button class="btn-page">&raquo;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for accepting preorder -->
+    <div id="accept-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Accept Preorder Request</h2>
+            <form id="accept-preorder-form">
+                <input type="hidden" id="accept-request-id" name="request_id">
+                
+                <div class="form-group">
+                    <label for="estimated-delivery">Estimated Delivery Date</label>
+                    <input type="date" id="estimated-delivery" name="estimated_delivery" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accept-notes">Notes to Customer (Optional)</label>
+                    <textarea id="accept-notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Confirm Acceptance</button>
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for rejecting preorder -->
+    <div id="reject-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reject Preorder Request</h2>
+            <form id="reject-preorder-form">
+                <input type="hidden" id="reject-request-id" name="request_id">
+                
+                <div class="form-group">
+                    <label for="reject-reason">Reason for Rejection</label>
+                    <select id="reject-reason" name="reject_reason" required>
+                        <option value="">Select a reason</option>
+                        <option value="out_of_stock">Out of stock</option>
+                        <option value="quality_issues">Quality issues</option>
+                        <option value="cannot_fulfill_date">Cannot fulfill by requested date</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reject-notes">Additional Notes (Optional)</label>
+                    <textarea id="reject-notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-reject">Confirm Rejection</button>
+                    <button type="button" class="btn btn-secondary modal-cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Farm Direct</h3>
+                    <p>Connecting farmers and customers directly since 2025.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="add_product.html">Add Product</a></li>
+                        <li><a href="preorder_requests.html">Preorders</a></li>
+                        <li><a href="orders.html">Orders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <p>Email: support@farmdirect.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Farm Direct. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal functionality
+            const acceptModal = document.getElementById('accept-modal');
+            const rejectModal = document.getElementById('reject-modal');
+            const acceptButtons = document.querySelectorAll('.btn-accept');
+            const rejectButtons = document.querySelectorAll('.btn-reject');
+            const closeBtns = document.querySelectorAll('.close');
+            const cancelBtns = document.querySelectorAll('.modal-cancel');
+            
+            // Open accept modal
+            acceptButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const requestId = this.getAttribute('data-id');
+                    document.getElementById('accept-request-id').value = requestId;
+                    acceptModal.style.display = 'block';
+                });
+            });
+            
+            // Open reject modal
+            rejectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const requestId = this.getAttribute('data-id');
+                    document.getElementById('reject-request-id').value = requestId;
+                    rejectModal.style.display = 'block';
+                });
+            });
+            
+            // Close modals
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    acceptModal.style.display = 'none';
+                    rejectModal.style.display = 'none';
+                });
+            });
+            
+            cancelBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    acceptModal.style.display = 'none';
+                    rejectModal.style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === acceptModal) {
+                    acceptModal.style.display = 'none';
+                }
+                if (event.target === rejectModal) {
+                    rejectModal.style.display = 'none';
+                }
+            });
+            
+            // Form submissions
+            document.getElementById('accept-preorder-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const requestId = document.getElementById('accept-request-id').value;
+                
+                // In a real app, you would use AJAX to submit to the backend
+                alert(`Preorder #${requestId} accepted!`);
+                acceptModal.style.display = 'none';
+                
+                // Update the table row status
+                updateRequestStatus(requestId, 'accepted');
+            });
+            
+            document.getElementById('reject-preorder-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const requestId = document.getElementById('reject-request-id').value;
+                
+                // In a real app, you would use AJAX to submit to the backend
+                alert(`Preorder #${requestId} rejected!`);
+                rejectModal.style.display = 'none';
+                
+                // Update the table row status
+                updateRequestStatus(requestId, 'rejected');
+            });
+            
+            // Status filter functionality
+            document.getElementById('status-filter').addEventListener('change', function() {
+                const status = this.value;
+                // In a real app, you would use AJAX to filter the table
+                alert(`Filtering by status: ${status}`);
+            });
+            
+            // Function to update request status in the table
+            function updateRequestStatus(requestId, newStatus) {
+                const rows = document.querySelectorAll('#preorder-requests-table tbody tr');
+                rows.forEach(row => {
+                    const idCell = row.querySelector('td:first-child');
+                    if (idCell && idCell.textContent.includes(requestId)) {
+                        const statusCell = row.querySelector('td:nth-child(7)');
+                        const actionsCell = row.querySelector('td:last-child');
+                        
+                        if (newStatus === 'accepted') {
+                            statusCell.innerHTML = '<span class="status-accepted">Accepted</span>';
+                            actionsCell.innerHTML = '<button class="btn btn-small btn-view" data-id="' + requestId + '">View Details</button>';
+                        } else if (newStatus === 'rejected') {
+                            statusCell.innerHTML = '<span class="status-rejected">Rejected</span>';
+                            actionsCell.innerHTML = '<button class="btn btn-small btn-view" data-id="' + requestId + '">View Details</button>';
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

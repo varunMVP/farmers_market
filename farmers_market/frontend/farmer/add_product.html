@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - Farm Direct</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Farm Direct</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="add_product.html" class="active">Add Product</a></li>
+                    <li><a href="preorder_requests.html">Preorders</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="../index.html" class="logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="add-product-section">
+        <div class="container">
+            <div class="section-header">
+                <h1>Add New Product</h1>
+                <p>List your fresh produce for customers to purchase directly from you.</p>
+            </div>
+
+            <div class="form-container">
+                <form id="add-product-form" action="../../backend/farmer/add_product.php" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" name="product_name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-category">Category</label>
+                            <select id="product-category" name="product_category" required>
+                                <option value="">Select Category</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="grains">Grains</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-price">Price per Unit (in rs)</label>
+                            <input type="number" id="product-price" name="product_price" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-unit">Unit</label>
+                            <select id="product-unit" name="product_unit" required>
+                                <option value="kg">Kilograms (kg)</option>
+                                <option value="g">Grams (g)</option>
+                                <option value="lb">Pounds (lb)</option>
+                                <option value="piece">Piece</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="liter">Liter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-quantity">Available Quantity</label>
+                            <input type="number" id="product-quantity" name="product_quantity" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="allow-preorder">Allow Pre-orders</label>
+                            <div class="toggle-container">
+                                <input type="checkbox" id="allow-preorder" name="allow_preorder" class="toggle-input">
+                                <label for="allow-preorder" class="toggle-label"></label>
+                                <span class="toggle-text">Yes, allow customers to pre-order this product</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-description">Product Description</label>
+                        <textarea id="product-description" name="product_description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product-image">Product Image</label>
+                        <div class="file-upload">
+                            <input type="file" id="product-image" name="product_image" accept="image/*">
+                            <label for="product-image" class="file-label">
+                                <span class="file-icon">📷</span>
+                                <span class="file-text">Choose Image</span>
+                            </label>
+                            <div id="image-preview" class="image-preview">
+                                <img src="/api/placeholder/200/200" alt="Product Image Preview">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="harvest-date">Harvest Date</label>
+                        <input type="date" id="harvest-date" name="harvest_date">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Farm Direct</h3>
+                    <p>Connecting farmers and customers directly since 2025.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="add_product.html">Add Product</a></li>
+                        <li><a href="preorder_requests.html">Preorders</a></li>
+                        <li><a href="orders.html">Orders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <p>Email: support@farmdirect.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Farm Direct. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image preview functionality
+            const productImage = document.getElementById('product-image');
+            const imagePreview = document.getElementById('image-preview').querySelector('img');
+            
+            productImage.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            
+            // Form submission with validation
+            const form = document.getElementById('add-product-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                const name = document.getElementById('product-name').value;
+                const price = document.getElementById('product-price').value;
+                const quantity = document.getElementById('product-quantity').value;
+                
+                if (!name || !price || !quantity) {
+                    alert('Please fill all required fields');
+                    return;
+                }
+                
+                // In a real app, you would use AJAX to submit the form
+                // For now, we'll just simulate success
+                alert('Product added successfully!');
+                form.reset();
+                imagePreview.src = '/api/placeholder/200/200';
+                
+                // Redirect to dashboard
+                // window.location.href = 'dashboard.html';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Feedback - Direct Market Access</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .feedback-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .feedback-intro {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .rating-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .rating-item .rating-label {
+            font-weight: bold;
+        }
+        
+        .star-rating {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        
+        .star-rating label {
+            color: #ddd;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #ffb700;
+        }
+        
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .submit-btn {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: flex-start;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1b5e20;
+        }
+        
+        .feedback-history {
+            margin-top: 40px;
+        }
+        
+        .feedback-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feedback-card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .feedback-product {
+            font-weight: bold;
+        }
+        
+        .feedback-date {
+            color: #777;
+        }
+        
+        .feedback-stars {
+            color: #ffb700;
+            margin: 5px 0;
+        }
+        
+        .feedback-comment {
+            margin-top: 10px;
+            color: #555;
+        }
+        
+        .form-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .form-tab {
+            padding: 12px 20px;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .form-tab.active {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-bottom: none;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .success-message {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Direct Market Access</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="browse_products.html">Browse Products</a></li>
+                <li><a href="preorder_form.html">Preorder</a></li>
+                <li><a href="feedback.html" class="active">Feedback</a></li>
+                <li><a href="../index.html" class="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h2>Customer Feedback</h2>
+        
+        <div class="feedback-container">
+            <div class="success-message" id="success-message">
+                Your feedback has been submitted successfully. Thank you for helping us improve!
+            </div>
+            
+            <div class="form-tabs">
+                <div class="form-tab active" data-tab="product-feedback">Product Feedback</div>
+                <div class="form-tab" data-tab="general-feedback">General Feedback</div>
+                <div class="form-tab" data-tab="feedback-history">My Feedback History</div>
+            </div>
+            
+            <div class="tab-content active" id="product-feedback">
+                <div class="feedback-intro">
+                    <p>Your feedback helps farmers improve their products and services. Please share your honest opinion about products you've purchased.</p>
+                </div>
+                
+                <form class="feedback-form" id="product-feedback-form">
+                    <div class="form-group">
+                        <label for="order-select">Select Order/Product</label>
+                        <select id="order-select" name="order_id" required>
+                            <option value="">-- Select an order --</option>
+                            <option value="1">Order #12345 - Fresh Organic Apples (May 3, 2025)</option>
+                            <option value="2">Order #12346 - Farm Fresh Tomatoes (May 1, 2025)</option>
+                            <option value="3">Order #12347 - Organic Carrots (April 28, 2025)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="rating-container">
+                        <div class="rating-item">
+                            <span class="rating-label">Product Quality</span>
+                            <div class="star-rating">
+                                <input type="radio" id="quality-5" name="quality_rating" value="5" required>
+                                <label for="quality-5">★</label>
+                                <input type="radio" id="quality-4" name="quality_rating" value="4">
+                                <label for="quality-4">★</label>
+                                <input type="radio" id="quality-3" name="quality_rating" value="3">
+                                <label for="quality-3">★</label>
+                                <input type="radio" id="quality-2" name="quality_rating" value="2">
+                                <label for="quality-2">★</label>
+                                <input type="radio" id="quality-1" name="quality_rating" value="1">
+                                <label for="quality-1">★</label>
+                            </div>
+                        </div>
+                        
+                        <div class="rating-item">
+                            <span class="rating-label">Freshness</span>
+                            <div class="star-rating">
+                                <input type="radio" id="freshness-5" name="freshness_rating" value="5" required>
+                                <label for="freshness-5">★</label>
+                                <input type="radio" id="freshness-4" name="freshness_rating" value="4">
+                                <label for="freshness-4">★</label>
+                                <input type="radio" id="freshness-3" name="freshness_rating" value="3">
+                                <label for="freshness-3">★</label>
+                                <input type="radio" id="freshness-2" name="freshness_rating" value="2">
+                                <label for="freshness-2">★</label>
+                                <input type="radio" id="freshness-1" name="freshness_rating" value="1">
+                                <label for="freshness-1">★</label>
+                            </div>
+                        </div>
+                        
+                        <div class="rating-item">
+                            <span class="rating-label">Value for Money</span>
+                            <div class="star-rating">
+                                <input type="radio" id="value-5" name="value_rating" value="5" required>
+                                <label for="value-5">★</label>
+                                <input type="radio" id="value-4" name="value_rating" value="4">
+                                <label for="value-4">★</label>
+                                <input type="radio" id="value-3" name="value_rating" value="3">
+                                <label for="value-3">★</label>
+                                <input type="radio" id="value-2" name="value_rating" value="2">
+                                <label for="value-2">★</label>
+                                <input type="radio" id="value-1" name="value_rating" value="1">
+                                <label for="value-1">★</label>
+                            </div>
+                        </div>
+                        
+                        <div class="rating-item">
+                            <span class="rating-label">Delivery Experience</span>
+                            <div class="star-rating">
+                                <input type="radio" id="delivery-5" name="delivery_rating" value="5" required>
+                                <label for="delivery-5">★</label>
+                                <input type="radio" id="delivery-4" name="delivery_rating" value="4">
+                                <label for="delivery-4">★</label>
+                                <input type="radio" id="delivery-3" name="delivery_rating" value="3">
+                                <label for="delivery-3">★</label>
+                                <input type="radio" id="delivery-2" name="delivery_rating" value="2">
+                                <label for="delivery-2">★</label>
+                                <input type="radio" id="delivery-1" name="delivery_rating" value="1">
+                                <label for="delivery-1">★</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedback-comments">Your Comments</label>
+                        <textarea id="feedback-comments" name="comments" placeholder="Please share your experience with this product and the farmer..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="product-image">Add Photo (Optional)</label>
+                        <input type="file" id="product-image" name="product_image" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Feedback</button>
+                </form>
+            </div>
+            
+            <div class="tab-content" id="general-feedback">
+                <div class="feedback-intro">
+                    <p>Help us improve the Direct Market Access platform by sharing your general feedback, suggestions, or ideas for new features.</p>
+                </div>
+                
+                <form class="feedback-form" id="general-feedback-form">
+                    <div class="form-group">
+                        <label for="feedback-type">Feedback Type</label>
+                        <select id="feedback-type" name="feedback_type" required>
+                            <option value="">-- Select type --</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="bug">Report a Problem</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="feedback-subject">Subject</label>
+                        <input type="text" id="feedback-subject" name="subject" placeholder="Brief description of your feedback" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="general-comments">Your Feedback</label>
+                        <textarea id="general-comments" name="general_comments" placeholder="Please provide details about your suggestion or issue..." required></textarea>
+                    </div>
+                    
+                    <div class="rating-container">
+                        <div class="rating-item">
+                            <span class="rating-label">Overall Platform Experience</span>
+                            <div class="star-rating">
+                                <input type="radio" id="platform-5" name="platform_rating" value="5" required>
+                                <label for="platform-5">★</label>
+                                <input type="radio" id="platform-4" name="platform_rating" value="4">
+                                <label for="platform-4">★</label>
+                                <input type="radio" id="platform-3" name="platform_rating" value="3">
+                                <label for="platform-3">★</label>
+                                <input type="radio" id="platform-2" name="platform_rating" value="2">
+                                <label for="platform-2">★</label>
+                                <input type="radio" id="platform-1" name="platform_rating" value="1">
+                                <label for="platform-1">★</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Feedback</button>
+                </form>
+            </div>
+            
+            <div class="tab-content" id="feedback-history">
+                <div class="feedback-intro">
+                    <p>Your previous feedback submissions are shown below.</p>
+                </div>
+                
+                <div class="feedback-history">
+                    <h3>Your Recent Feedback</h3>
+                    
+                    <div class="feedback-card">
+                        <div class="feedback-card-header">
+                            <div class="feedback-product">Fresh Organic Apples</div>
+                            <div class="feedback-date">May 4, 2025</div>
+                        </div>
+                        <div class="feedback-stars">★★★★★</div>
+                        <div class="feedback-comment">
+                            The apples were incredibly fresh and juicy. Definitely better than supermarket produce. Will order again!
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-card">
+                        <div class="feedback-card-header">
+                            <div class="feedback-product">Farm Fresh Tomatoes</div>
+                            <div class="feedback-date">May 2, 2025</div>
+                        </div>
+                        <div class="feedback-stars">★★★★☆</div>
+                        <div class="feedback-comment">
+                            Great tomatoes, very flavorful. Delivery was a bit delayed, but the farmer communicated well about it.
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-card">
+                        <div class="feedback-card-header">
+                            <div class="feedback-product">Platform Suggestion</div>
+                            <div class="feedback-date">April 28, 2025</div>
+                        </div>
+                        <div class="feedback-stars">★★★★☆</div>
+                        <div class="feedback-comment">
+                            Would love to see more filter options when browsing products, especially for organic certification and farm location.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Direct Market Access for Farmers</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        const tabs = document.querySelectorAll('.form-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to current tab and content
+                this.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Form submissions
+        document.getElementById('product-feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In production, this would send data to the server via AJAX
+            // For now, just show success message
+            document.getElementById('success-message').style.display = 'block';
+            this.reset();
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'none';
+            }, 3000);
+        });
+        
+        document.getElementById('general-feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In production, this would send data to the server via AJAX
+            // For now, just show success message
+            document.getElementById('success-message').style.display = 'block';
+            this.reset();
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'none';
+            }, 3000);
+        });
+        
+        // In a real application, you would load feedback history from the server
+        function loadFeedbackHistory() {
+            // Fetch feedback history from backend/customer/get_feedback_history.php
+            // and populate the feedback-history container
+        }
+        
+        // Function to set current date as min date for date inputs
+        function setMinDates() {
+            const today = new Date();
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            const formattedDate = today.toISOString().substr(0, 10);
+            
+            dateInputs.forEach(input => {
+                input.min = formattedDate;
+            });
+        }
+        
+        // Call on page load
+        // loadFeedbackHistory();
+        // setMinDates();
+    </script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Direct Market Access</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .tab-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px 5px 10px 0;
+            border: 1px solid #007bff;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #e9f0ff;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .tab-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .form-footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .form-footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .category-images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .category {
+            text-align: center;
+        }
+
+        .category img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .category p {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username*</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password*</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Select Role*</label><br>
+                <span class="tab-btn active" data-role="farmer">Farmer</span>
+                <span class="tab-btn" data-role="customer">Customer</span>
+                <input type="hidden" id="user-role" value="farmer">
+            </div>
+
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+
+        <div class="form-footer">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+    </div>
+
+    <div class="category-images">
+        <div class="category">
+            <img src="assets/images/Fruits.jpg" alt="Fruits">
+            <p>Fruits</p>
+        </div>
+        <div class="category">
+            <img src="../assets/images/vegetables.jpg" alt="Vegetables">
+            <p>Vegetables</p>
+        </div>
+        <div class="category">
+            <img src="../assets/images/dairy.jpg" alt="Dairy">
+            <p>Dairy</p>
+        </div>
+        <div class="category">
+            <img src="../assets/images/grains.jpg" alt="Grains">
+            <p>Grains</p>
+        </div>
+        <div class="category">
+            <img src="../assets/images/spices.jpg" alt="Spices">
+            <p>Spices</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const roleInput = document.getElementById('user-role');
+            const loginForm = document.getElementById('login-form');
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    roleInput.value = this.dataset.role;
+                });
+            });
+
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const role = roleInput.value;
+                if (role === 'farmer') {
+                    window.location.href = 'farmer/dashboard.html';
+                } else {
+                    window.location.href = 'customer/dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

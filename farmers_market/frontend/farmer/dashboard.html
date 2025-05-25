@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Farm Direct</title>
+    <link rel="stylesheet" href="../farmer/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Farm Direct</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="add_product.html">Add Product</a></li>
+                    <li><a href="preorder_requests.html">Preorders</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="../index.html" class="logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="farmer-dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Welcome, <span id="farmer-name">Farmer</span>!</h1>
+                <p>Manage your products, orders and preorder requests all in one place.</p>
+            </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Active Products</h3>
+                    <p class="stat-number" id="active-products">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Orders</h3>
+                    <p class="stat-number" id="pending-orders">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Preorder Requests</h3>
+                    <p class="stat-number" id="preorder-requests">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p class="stat-number" id="total-sales">$0</p>
+                </div>
+            </div>
+        </br>
+
+            <div class="dashboard-actions">
+                <a href="add_product.html" class="btn btn-primary">Add New Product</a>
+                <a href="preorder_requests.html" class="btn btn-secondary">View Preorders</a>
+                <a href="orders.html" class="btn btn-secondary">Manage Orders</a>
+            </div>
+
+            <div class="recent-section">
+                <h2>Recent Products</h2>
+                <div class="table-responsive">
+                    <table class="data-table" id="recent-products-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Quantity Available</th>
+                                <th>Added Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="no-data">Loading products...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="recent-section">
+                <h2>Recent Orders</h2>
+                <div class="table-responsive">
+                    <table class="data-table" id="recent-orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Products</th>
+                                <th>Total Amount</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="no-data">Loading orders...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Farm Direct</h3>
+                    <p>Connecting farmers and customers directly since 2025.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="add_product.html">Add Product</a></li>
+                        <li><a href="preorder_requests.html">Preorders</a></li>
+                        <li><a href="orders.html">Orders</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <p>Email: support@farmdirect.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Farm Direct. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch farmer info from session
+            fetchFarmerInfo();
+            
+            // Fetch dashboard stats
+            fetchDashboardStats();
+            
+            // Fetch recent products
+            fetchRecentProducts();
+            
+            // Fetch recent orders
+            fetchRecentOrders();
+        });
+
+        function fetchFarmerInfo() {
+            // This would typically be an AJAX request to get the farmer's info from session
+            // For now, we'll simulate it
+            const farmerName = localStorage.getItem('farmer_name') || 'Farmer';
+            document.getElementById('farmer-name').textContent = farmerName;
+        }
+
+        function fetchDashboardStats() {
+            // Simulate AJAX request for dashboard stats
+            // In a real app, you would fetch this data from your PHP backend
+            setTimeout(() => {
+                document.getElementById('active-products').textContent = '12';
+                document.getElementById('pending-orders').textContent = '5';
+                document.getElementById('preorder-requests').textContent = '3';
+                document.getElementById('total-sales').textContent = '$1,250';
+            }, 500);
+        }
+
+        function fetchRecentProducts() {
+            // Simulate AJAX request for recent products
+            // In a real app, you would fetch this data from your PHP backend
+            setTimeout(() => {
+                const productsTableBody = document.querySelector('#recent-products-table tbody');
+                productsTableBody.innerHTML = `
+                    <tr>
+                        <td>Fresh Apples</td>
+                        <td>Fruits</td>
+                        <td>500rs/kg</td>
+                        <td>5 kg</td>
+                        <td>2025-05-05</td>
+                        <td>
+                            <button class="btn btn-small btn-edit">Edit</button>
+                            <button class="btn btn-small btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Organic Tomatoes</td>
+                        <td>Vegetables</td>
+                        <td>60rs/kg</td>
+                        <td>30 kg</td>
+                        <td>2025-05-04</td>
+                        <td>
+                            <button class="btn btn-small btn-edit">Edit</button>
+                            <button class="btn btn-small btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Brown Rice</td>
+                        <td>Grains</td>
+                        <td>100rs/kg</td>
+                        <td>100 kg</td>
+                        <td>2025-05-03</td>
+                        <td>
+                            <button class="btn btn-small btn-edit">Edit</button>
+                            <button class="btn btn-small btn-delete">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }, 500);
+        }
+
+        function fetchRecentOrders() {
+            // Simulate AJAX request for recent orders
+            // In a real app, you would fetch this data from your PHP backend
+            setTimeout(() => {
+                const ordersTableBody = document.querySelector('#recent-orders-table tbody');
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td>#ORD12345</td>
+                        <td>chandana</td>
+                        <td>Apples (5kg), Tomatoes (2kg)</td>
+                        <td>2000rs</td>
+                        <td>2025-05-06</td>
+                        <td><span class="status-pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD12344</td>
+                        <td>Mokshith</td>
+                        <td>Brown Rice (10kg)</td>
+                        <td>1000rs</td>
+                        <td>2025-05-05</td>
+                        <td><span class="status-completed">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD12343</td>
+                        <td>Komal</td>
+                        <td>Apples (3kg)</td>
+                        <td>1500</td>
+                        <td>2025-05-04</td>
+                        <td><span class="status-completed">Completed</span></td>
+                    </tr>
+                `;
+            }, 700);
+        }
+    </script>
+</body>
+</html>
